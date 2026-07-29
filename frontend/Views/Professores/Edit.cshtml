@@ -1,0 +1,81 @@
+@model Frontend.Models.ProfessorEditViewModel
+
+@{
+    ViewData["Title"] = "Editar Professor";
+}
+
+<div class="page-header" style="background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <h1 class="mb-1"><i class="bi bi-pencil-fill me-2"></i>Editar Professor</h1>
+                <p class="mb-0 opacity-75">Atualize os dados de <strong>@Model.Nome</strong></p>
+            </div>
+            <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-dark">
+                <i class="bi bi-eye me-2"></i>Ver Detalhes
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card fade-in">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0"><i class="bi bi-pencil me-2"></i>Editar Dados do Professor</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Edit" method="post" novalidate>
+                        <input type="hidden" asp-for="Id" />
+                        
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label asp-for="Nome" class="form-label fw-medium"></label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                    <input asp-for="Nome" class="form-control form-control-lg" placeholder="Nome completo do professor" autocomplete="name" />
+                                </div>
+                                <span asp-validation-for="Nome" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Email" class="form-label fw-medium"></label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                    <input asp-for="Email" class="form-control form-control-lg" placeholder="email@exemplo.com" autocomplete="email" />
+                                </div>
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Materia" class="form-label fw-medium"></label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-card-text"></i></span>
+                                    <input asp-for="Materia" class="form-control form-control-lg" placeholder="Nome da matéria" autocomplete="off" />
+                                </div>
+                                <span asp-validation-for="Materia" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <hr class="my-4" />
+                        
+                        <div class="d-flex justify-content-end gap-3">
+                            <a asp-action="Index" class="btn btn-outline-secondary btn-lg px-4">
+                                <i class="bi bi-x-lg me-2"></i>Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-warning btn-lg px-5">
+                                <i class="bi bi-save me-2"></i>Atualizar Professor
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

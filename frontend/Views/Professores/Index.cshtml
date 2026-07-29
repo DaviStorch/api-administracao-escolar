@@ -1,0 +1,180 @@
+@model IEnumerable<Frontend.Models.Professor>
+
+@{
+    ViewData["Title"] = "Lista de Professores";
+}
+
+<div class="header-professores">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <h1 class="mb-1"><i class="bi bi-people-fill me-2"></i>Professores</h1>
+                <p class="mb-0 opacity-75">Gerencie os professores cadastrados no sistema</p>
+            </div>
+            <a asp-action="Create" class="btn btn-light btn-lg">
+                <i class="bi bi-plus-lg me-2"></i>Novo Professor
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show fade-in" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>@TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show fade-in" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>@TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="card fade-in">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h5 class="mb-0"><i class="bi bi-list-ul me-2"></i>Lista de Professores</h5>
+            <div class="d-flex gap-2">
+                <span class="badge bg-primary fs-6 px-3 py-2 align-self-center" id="totalProfessores">@(Model?.Count() ?? 0) professores</span>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            @if (Model != null && Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover mb-0 align-middle" id="professoresTable">
+                        <thead class="table-dark">
+                            <tr>
+                                <th style="width: 60px;">ID</th>
+                                <th>Nome</th>
+                                <th>E-mail</th>
+                                <th style="width: 140px;">Materia</th>
+                                <th class="text-center" style="width: 160px;">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var professor in Model)
+                            {
+                                <tr>
+                                    <td><span class="badge bg-secondary">@professor.Id</span></td>
+                                    <td class="fw-medium">@professor.Nome</td>
+                                    <td>@professor.Email</td>
+                                    <td><code class="bg-light px-2 py-1 rounded fw-monospace">@professor.Materia</code></td>
+                                    <td class="text-center">
+                                        <div class="d-flex justify-content-center gap-1 flex-wrap">
+                                            <!-- Desktop: button group -->
+                                            <div class="btn-group btn-group-sm d-none d-md-flex" role="group">
+                                                <a asp-action="Details" asp-route-id="@professor.Id" class="btn btn-outline-info" title="Ver detalhes" data-bs-toggle="tooltip" data-bs-placement="top">
+                                                    <i class="bi bi-eye"></i>
+                                                    <span class="d-none d-lg-inline ms-1">Ver</span>
+                                                </a>
+                                                <a asp-action="Edit" asp-route-id="@professor.Id" class="btn btn-outline-warning" title="Editar" data-bs-toggle="tooltip" data-bs-placement="top">
+                                                    <i class="bi bi-pencil"></i>
+                                                    <span class="d-none d-lg-inline ms-1">Editar</span>
+                                                </a>
+                                                <a asp-action="Delete" asp-route-id="@professor.Id" class="btn btn-outline-danger" title="Excluir" onclick="return confirm('Tem certeza que deseja excluir este professor?')" data-bs-toggle="tooltip" data-bs-placement="top">
+                                                    <i class="bi bi-trash"></i>
+                                                    <span class="d-none d-lg-inline ms-1">Excluir</span>
+                                                </a>
+                                            </div>
+                                            
+                                            <!-- Mobile: dropdown menu -->
+                                            <div class="dropdown d-md-none">
+                                                <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Ações">
+                                                    <i class="bi bi-three-dots-vertical"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end shadow">
+                                                    <li>
+                                                        <a class="dropdown-item" asp-action="Details" asp-route-id="@professor.Id">
+                                                            <i class="bi bi-eye text-info me-2"></i>Ver detalhes
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item" asp-action="Edit" asp-route-id="@professor.Id">
+                                                            <i class="bi bi-pencil text-warning me-2"></i>Editar
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item text-danger" asp-action="Delete" asp-route-id="@professor.Id" onclick="return confirm('Tem certeza que deseja excluir este professor?')">
+                                                            <i class="bi bi-trash me-2"></i>Excluir
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Mobile card view (hidden on desktop) -->
+                <div class="d-md-none">
+                    @foreach (var professor in Model)
+                    {
+                        <div class="card mx-3 my-3 border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <h6 class="mb-1">@professor.Nome</h6>
+                                        <small class="text-muted">ID: @professor.Id</small>
+                                    </div>
+                                    <span class="badge bg-secondary">@professor.Id</span>
+                                </div>
+                                <div class="row g-2 mb-3">
+                                    <div class="col-6">
+                                        <small class="text-muted d-block">E-mail</small>
+                                        <small>@professor.Email</small>
+                                    </div>
+                                    <div class="col-6">
+                                        <small class="text-muted d-block">Matrícula</small>
+                                        <small class="fw-monospace">@professor.Materia</small>
+                                    </div>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <a asp-action="Details" asp-route-id="@professor.Id" class="btn btn-outline-info btn-sm flex-fill">
+                                        <i class="bi bi-eye me-1"></i>Ver
+                                    </a>
+                                    <a asp-action="Edit" asp-route-id="@professor.Id" class="btn btn-outline-warning btn-sm flex-fill">
+                                        <i class="bi bi-pencil me-1"></i>Editar
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@professor.Id" class="btn btn-outline-danger btn-sm flex-fill" onclick="return confirm('Tem certeza que deseja excluir este professor?')">
+                                        <i class="bi bi-trash me-1"></i>Excluir
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="empty-state text-center py-5">
+                    <i class="bi bi-people text-muted" style="font-size: 4rem;"></i>
+                    <h4 class="text-muted mt-3">Nenhum professor cadastrado</h4>
+                    <p class="text-muted mb-4">Comece adicionando o primeiro professor ao sistema.</p>
+                    <a asp-action="Create" class="btn btn-primary btn-lg">
+                        <i class="bi bi-plus-lg me-2"></i>Adicionar Primeiro Professor
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Initialize tooltips
+        document.addEventListener('DOMContentLoaded', function() {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function(tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+    </script>
+}
